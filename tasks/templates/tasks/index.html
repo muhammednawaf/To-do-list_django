@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -135,6 +136,26 @@
             border-radius: 12px;
         }
 
+        .edit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 11px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn:hover {
+            background: #c7d2fe;
+            color: #3730a3;
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 30px 12px;
@@ -163,51 +184,48 @@
 
         <form method="post" class="add-form">
             {% csrf_token %}
-            <input
-                type="text"
-                name="title"
-                placeholder="What needs to be done?"
-                required
-            >
+            <input type="text" name="title" placeholder="What needs to be done?" required>
             <button type="submit" class="add-btn">+ Add</button>
         </form>
 
         <div class="task-list">
             {% for task in tasks %}
-                <div class="task-card">
-                    <div>
-                        <div class="task-title">{{ task.title }}</div>
+            <div class="task-card">
+                <div>
+                    <div class="task-title">{{ task.title }}</div>
 
-                        {% if task.completed %}
-                            <p class="completed">✓ Completed</p>
-                        {% endif %}
-                    </div>
+                    {% if task.completed %}
+                    <p class="completed">✓ Completed</p>
+                    {% endif %}
 
-                    <div class="actions">
-                        {% if not task.completed %}
-                            <form method="post" action="{% url 'update' task.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="done-btn">
-                                    ✓ Done
-                                </button>
-                            </form>
-                        {% endif %}
-
-                        <form method="post" action="{% url 'delete' task.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="delete-btn">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
                 </div>
+                <div class="actions">
+                    <a href="{% url 'edit' task.id %}" class="edit-btn">Edit</a>
+                    {% if not task.completed %}
+                    <form method="post" action="{% url 'update' task.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="done-btn">
+                            ✓ Done
+                        </button>
+                    </form>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'delete' task.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
             {% empty %}
-                <div class="empty">
-                    <p>No tasks yet! 🌱</p>
-                    <p style="margin-top: 8px;">Add your first task above.</p>
-                </div>
+            <div class="empty">
+                <p>No tasks yet! 🌱</p>
+                <p style="margin-top: 8px;">Add your first task above.</p>
+            </div>
             {% endfor %}
         </div>
     </div>
 </body>
+
 </html>

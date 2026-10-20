@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .edit-card {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px #0000000d;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px #6366f120;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .save-btn {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #4338ca;
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="edit-card">
+        <h1>Edit Task ✏️</h1>
+        <p class="subtitle">Make changes to your task below.</p>
+
+        <form method="post" action="{% url 'edit' task.id %}">
+            {% csrf_token %}
+
+            <label for="title">Task title</label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="{{ task.title }}"
+                required
+                autofocus
+            >
+
+            <div class="actions">
+                <button type="submit" class="btn save-btn">
+                    Save Changes
+                </button>
+
+                <a href="{% url 'home' %}" class="btn cancel-btn">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

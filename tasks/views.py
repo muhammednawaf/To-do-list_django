@@ -24,3 +24,13 @@ def delete(req,task_id):
     task = get_object_or_404(Tasks,id=task_id)
     task.delete()
     return redirect('home')
+
+
+def edit(req,task_id):
+    task = get_object_or_404(Tasks,id=task_id)
+    if req.method == 'POST':
+        newTitle = req.POST.get('title')
+        task.title = newTitle
+        task.save()
+        return redirect('home')
+    return render(req,"tasks/edit.html",{'task':task})
