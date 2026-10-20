@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #1f2937;
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000008;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #6366f1;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .add-btn {
+            background: #bee73a;
+            color: white;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000006;
+        }
+
+        .task-title {
+            overflow-wrap: anywhere;
+            font-size: 16px;
+        }
+
+        .completed {
+            color: #16a34a;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .done-btn {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            color: #6b7280;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 30px 12px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .task-card {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .actions {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>My To-Do List ✨</h1>
+        <p class="subtitle">Stay organized. Get things done.</p>
+
+        <form method="post" class="add-form">
+            {% csrf_token %}
+            <input
+                type="text"
+                name="title"
+                placeholder="What needs to be done?"
+                required
+            >
+            <button type="submit" class="add-btn">+ Add</button>
+        </form>
+
+        <div class="task-list">
+            {% for task in tasks %}
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">{{ task.title }}</div>
+
+                        {% if task.completed %}
+                            <p class="completed">✓ Completed</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="actions">
+                        {% if not task.completed %}
+                            <form method="post" action="{% url 'update' task.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="done-btn">
+                                    ✓ Done
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        <form method="post" action="{% url 'delete' task.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-btn">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty">
+                    <p>No tasks yet! 🌱</p>
+                    <p style="margin-top: 8px;">Add your first task above.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
